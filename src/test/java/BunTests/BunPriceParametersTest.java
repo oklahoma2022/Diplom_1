@@ -12,31 +12,28 @@ public class BunPriceParametersTest {
     Bun bun;
     public float actualValue;
     public float expectedValue;
-    private final boolean expectedResult;
 
-    public BunPriceParametersTest(float actualValue, float expectedValue, boolean expectedResult) {
+    public BunPriceParametersTest(float actualValue, float expectedValue) {
         this.actualValue = actualValue;
         this.expectedValue = expectedValue;
-        this.expectedResult = expectedResult;
         this.bun = new Bun("black bun", this.actualValue);
     }
 
-    @Parameterized.Parameters(name = "Тестовые данные : Передаваемая цена {0}, Ожидаемая цена : {1},Ожидаемый результат: {2}")
+    @Parameterized.Parameters(name = "Тестовые данные : Передаваемая цена {0}, Ожидаемая цена : {1}")
     public static Object[][] getPriceBun() {
         return new Object[][]{
-                {100, 100, true}, // Позитивная проверка, данные существуют
-                {200, 200, true}, // Позитивная проверка, данные существуют
-                {300, 300, true}, // Позитивная проверка, данные существуют
-                {0, 300, false}, // Негативная проверка, данных нет
+                {100, 100}, // Позитивная проверка, данные существуют
+                {200, 200}, // Позитивная проверка, данные существуют
+                {300, 300}, // Позитивная проверка, данные существуют
+                {0, 0}, // Позитивная проверка ( нет ограничений по тз)
+                {-100, -100}, // Позитивная проверка ( нет ограничений по тз)
+                {0.65345345345345345345f, 0.65345345345345345345f}, // Позитивная проверка минимальная дробная цена( нет ограничений по тз)
+                {999999999999999999999.0f, 999999999999999999999.0f},// Позитивная проверка, очень большая цена( нет ограничений по тз)
         };
     }
 
     @Test
     public void checkBunPrice() {
-        if (this.expectedResult) {
-            Assert.assertEquals(this.actualValue, this.expectedValue, 0);
-        } else {
-            Assert.assertNotEquals(this.actualValue, this.expectedValue, 0);
-        }
+        Assert.assertEquals(this.actualValue, this.expectedValue, 0);
     }
 }

@@ -1,6 +1,8 @@
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import praktikum.Bun;
 import praktikum.Burger;
@@ -11,18 +13,25 @@ import static org.junit.Assert.assertNotNull;
 import static praktikum.IngredientType.FILLING;
 import static praktikum.IngredientType.SAUCE;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.class) // Необходима для инициализации mock
 public class BurgerTest {
-    Burger burger = new Burger();
+    Burger burger;
     @Mock
-    Bun bun;
+    Bun bun; // В одном из тестов замокали метод получения цены
     @Mock
     Ingredient ingredient;
+
+    @Before
+    public void initEmptyBurger() {
+        burger = new Burger();
+    }
+
     @Test
     public void setBunsTest() {
         burger.setBuns(bun);
         assertEquals(bun, burger.bun);
     }
+
     @Test
     public void addIngredientTest() {
         burger.addIngredient(ingredient);
@@ -49,7 +58,9 @@ public class BurgerTest {
 
     @Test
     public void getPriceTest() {
-        burger.setBuns(new Bun("black bun", 100));
+        Mockito.when(bun.getPrice()).thenReturn(100F);
+        burger.setBuns(bun);
+
         burger.addIngredient(new Ingredient(FILLING, "dinosaur", 200));
         assertEquals(400, burger.getPrice(), 0);
     }
